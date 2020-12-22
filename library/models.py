@@ -1,7 +1,7 @@
 from django.db import models
 
 class Author(models.Model):
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100)
     email = models.EmailField(unique=True, null=True)
 
     def __str__(self):
@@ -9,38 +9,38 @@ class Author(models.Model):
 
 
 class Book(models.Model):
-    name = models.CharField(max_length=100, null=True)
-    publisher_name = models.CharField(max_length=100, null=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100)
+    publisher_name = models.CharField(max_length=100)
+    author = models.ForeignKey(Author, related_name='book_set', on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
 
 
 class Student(models.Model):
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100)
     email = models.EmailField(unique=True, null=True)
-    standard = models.PositiveIntegerField(null=True)
-    book = models.ManyToManyField(Book, through="BookIssued")
+    standard = models.PositiveIntegerField()
+    books = models.ManyToManyField(Book, related_name='student_set', through="BookIssued")
     
     def __str__(self):
         return self.name        
 
 
 class Library(models.Model):
-    name = models.CharField(max_length=100, null=True)
-    book = models.ManyToManyField(Book)
-    total = models.PositiveIntegerField(null=True)
+    name = models.CharField(max_length=100)
+    books = models.ManyToManyField(Book, related_name='library_set')
+    total = models.PositiveIntegerField()
     
     def __str__(self):
         return self.name
 
 
 class BookIssued(models.Model):
-    library = models.ForeignKey(Library, on_delete=models.CASCADE, null=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
-    date_enrolled = models.DateField(null=True)
+    library = models.ForeignKey(Library, related_name='bookIssued_set', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, related_name='bookIssued_set', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, related_name='bookIssued_set', on_delete=models.CASCADE)
+    date_issued = models.DateField()
 
     class Meta:
         unique_together = [['library', 'book', 'student']]
@@ -50,17 +50,17 @@ class BookIssued(models.Model):
 
 
 class College(models.Model):
-    name = models.CharField(max_length=100, null=True)
-    library = models.ManyToManyField(Library)
-    student = models.ManyToManyField(Student)
+    name = models.CharField(max_length=100)
+    library = models.ForeignKey(Library, related_name='college_set', on_delete=models.PROTECT)
+    student = models.ForeignKey(Student, related_name='college_set', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
 
 
 class University(models.Model):
-    name = models.CharField(max_length=100, null=True)
-    college = models.ManyToManyField(College)
+    name = models.CharField(max_length=100)
+    college = models.ForeignKey(College, related_name='university_set', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
