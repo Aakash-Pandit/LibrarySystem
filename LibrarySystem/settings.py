@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'library.apps.LibraryConfig',
-    'rest_framework'
+    'rest_framework',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 ROOT_URLCONF = 'LibrarySystem.urls'
 
@@ -75,7 +79,8 @@ WSGI_APPLICATION = 'LibrarySystem.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         #if unauthenticated user tries to manupulate the data, it cant be done.
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        # 'rest_framework.permissions.IsAuthenticated',
     ]
 }
 

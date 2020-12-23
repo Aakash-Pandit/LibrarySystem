@@ -55,7 +55,7 @@ class College(models.Model):
     student = models.ForeignKey(Student, related_name='college_set', on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.library.name}"
 
 
 class University(models.Model):
@@ -63,4 +63,4 @@ class University(models.Model):
     college = models.ForeignKey(College, related_name='university_set', on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.college.name}"
