@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from library.serializer import (AuthorInfoSerializer, BookInfoSerializer, StudentInfoSerializer,
                                 BookIssuedInfoSerializer, LibraryInfoSerializer, CollegeInfoSerializer,
                                 UniversityInfoSerializer)
-from .models import Author, Book, Student, BookIssued, Library, College, University
+from library.models import Author, Book, Student, BookIssued, Library, College, University
 
 class AuthorInfoView(viewsets.ModelViewSet):                
     serializer_class = AuthorInfoSerializer
